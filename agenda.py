@@ -22,25 +22,25 @@ class Agenda:
         self.load_contatos() #* Carrega os contatos do json
         
         #* Configurar a fonte
-        fonte_padrao = ("JetBrains Mono", 16)
+        fonte_padrao = ("JetBrains Mono", 20)
         
         #* Configurar todos os widgets da página
 
-        #* Informação Nome
+        #* Label Nome
         self.label_nome = tk.Label(root, text="Nome: ", font=fonte_padrao)
         self.label_nome.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         #* Input do nome
         self.entry_nome = tk.Entry(root, font=fonte_padrao)
         self.entry_nome.grid(row=0, column=1, padx=10, pady=10, sticky="ew")
         
-        #* Informação telefone
+        #* Label telefone
         self.label_telefone = tk.Label(root, text="Telefone: ", font=fonte_padrao)
         self.label_telefone.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
-        # Input Telefone
+        #* Input Telefone
         self.entry_telefone = tk.Entry(root, font=fonte_padrao)
         self.entry_telefone.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
         
-        #* Informação email
+        #* Label email
         self.label_email = tk.Label(root, text="Email: ", font=fonte_padrao)
         self.label_email.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
         #* Input Email
@@ -50,20 +50,22 @@ class Agenda:
         
         #* Botões
         #* Botão de adicionar contato
-        self.botao_add = tk.Button(root, text="Adicionar Contato", font=fonte_padrao, command=self.adicionar_contato)
+        self.botao_add = tk.Button(root, text="Adicionar Contato", font=fonte_padrao, background='#57DB28', command=self.adicionar_contato)
         self.botao_add.grid(row=3, column=0, columnspan=2, pady=10, sticky="ew")
         
         #* Botão de listar contatos
-        self.botao_list = tk.Button(root, text="Listar Contatos", font=fonte_padrao, command=self.listar_contatos)
+        self.botao_list = tk.Button(root, text="Listar Contatos", font=fonte_padrao, background='#449CDC', command=self.listar_contatos)
         self.botao_list.grid(row=4, column=0, columnspan=2, pady=10, sticky="ew")
         
-         #* Botão de editar
-        self.botao_edit = tk.Button(root, text="Editar Contato", font=fonte_padrao, command=self.editar_contato)
-        self.botao_edit.grid(row=6, column=0, columnspan=2, pady=10, sticky="ew")
+        #* Botão de editar
+        self.botao_edit = tk.Button(root, text="Editar Contato", font=fonte_padrao, background='yellow', command=self.editar_contato)
+        self.botao_edit.grid(row=5, column=0, columnspan=2, pady=10, sticky="ew")
         
         #* Botão de deletar
-        self.botao_del = tk.Button(root, text="Excluir Contato", font=fonte_padrao, command=self.excluir_contato)
-        self.botao_del.grid(row=5, column=0, columnspan=2, pady=10, sticky="ew")
+        self.botao_del = tk.Button(root, text="Excluir Contato", font=fonte_padrao, background='#DB190E', command=self.excluir_contato)
+        self.botao_del.grid(row=6, column=0, columnspan=2, pady=10, sticky="ew")
+        
+
         
         for i in range(6):
             root.grid_rowconfigure(i, weight=1)
@@ -77,7 +79,7 @@ class Agenda:
         
         # Verificar se os campos não estão vazios
         if nome and telefone and email:
-            contato_id = len(self.contatos) + 1  # Gerar um ID único para o contato
+            contato_id = len(self.contatos) + 1  # Conforme ele vai adicionando ele cria um ID único para o contato
             contato = Contato(contato_id, nome, telefone, email)
             self.contatos.append(contato)
             self.save_contatos()
@@ -133,15 +135,18 @@ class Agenda:
         else:
             messagebox.showerror("ERROR!", "ID do contato inválido.")
             
+    #* Função para limpar os inputs       
     def limpa_entradas(self):
         self.entry_nome.delete(0, tk.END)
         self.entry_telefone.delete(0, tk.END)
         self.entry_email.delete(0, tk.END)
         
+    #* Função para salvar os contatos no arquivo json
     def save_contatos(self):
         with open("contatos.json", "w") as f:
             json.dump([contato.__dict__ for contato in self.contatos], f)
-    
+            
+    #* Função para carregar os contatos no arquivo json
     def load_contatos(self):
         if os.path.exists("contatos.json"):
             with open("contatos.json", "r") as f:
